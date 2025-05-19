@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('slug', 255);
             $table->text('synopsis')->nullable();
             $table->foreignId('category_id')->constrained();
-            $table->year('4');
+            $table->year('year');
             $table->text('actors')->nullable();
             $table->string('cover_image', 255)->nullable();
 
