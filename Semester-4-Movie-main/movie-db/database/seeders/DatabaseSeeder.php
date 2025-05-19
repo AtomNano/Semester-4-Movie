@@ -3,11 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Movie;
-use App\Models\Category;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Movie;
 use Illuminate\Database\Seeder;
-use Database\Seeders\CategorySeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,7 +20,6 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-
         $this->call(CategorySeeder::class);
         Movie::factory(50)->create();
         
