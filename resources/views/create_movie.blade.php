@@ -43,6 +43,7 @@
                         <label for="cover_image" class="form-label">Cover Image</label>
                         <input class="form-control" type="file" id="cover_image" name="cover_image" accept="image/*">
                     </div>
+                    
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-success btn-lg">Simpan</button>
                     </div>
