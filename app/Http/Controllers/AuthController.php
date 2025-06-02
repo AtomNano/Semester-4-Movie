@@ -12,23 +12,22 @@ class AuthController extends Controller
     {
         return view('login');
     }
+public function loginAction(Request $request)
+{
+    $credentials = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required'
+    ]);
 
-    public function login(Request $request){
-        $credentials = $request -> validate(
-            [
-                'email' => 'required|email',
-                'password' => 'required'
-            ]
-            );
-            if(Auth::attempt($credentials)){
-                $request->session()->regenerate();
-                return redirect('/')->with('success', 'Login Succesfully,Welcome' . Auth::user()->name);
-            }
-
-            return back()->withErrors([
-                'email' => 'Email Not Found'
-            ]);
+    if (Auth::attempt($credentials)) {
+        $request->session()->regenerate();
+        return redirect('/')->with('success', 'Login Successfully, Welcome ' . Auth::user()->name);
     }
+
+    return back()->withErrors([
+        'email' => 'Email Not Found'
+    ]);
+}
 
     public function logout(Request $request): RedirectResponse
     {
