@@ -132,4 +132,24 @@ private function generateUniqueSlug($title, $id = null)
     return $slug;
 }
 
+
+public function destroy($id)
+{
+    $movie = Movie::findOrFail($id);
+
+    // Soft delete data
+    $movie->delete();
+
+    return redirect('/')->with('success', 'Movie berhasil dihapus (soft delete)!');
+}
+
+public function restore($id)
+{
+    $movie = Movie::withTrashed()->findOrFail($id);
+
+    // Restore data
+    $movie->restore();
+
+    return redirect('/')->with('success', 'Movie berhasil dikembalikan!');
+}
 }

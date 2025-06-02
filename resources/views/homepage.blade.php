@@ -37,6 +37,19 @@
                             <a href="{{ route('movies.detail', ['id' => $movie->id]) }}" class="btn text-white bg-success">See More</a>
                             @auth
                                 <a href="{{ route('movies.edit', ['id' => $movie->id]) }}" class="btn btn-warning text-white">Edit</a>
+
+                                @if ($movie->trashed())
+        <form action="{{ route('movies.restore', ['id' => $movie->id]) }}" method="POST" style="display: inline-block;">
+            @csrf
+            <button type="submit" class="btn btn-success text-white">Restore</button>
+        </form>
+    @else
+        <form action="{{ route('movies.destroy', ['id' => $movie->id]) }}" method="POST" style="display: inline-block;">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger text-white" onclick="return confirm('Apakah Anda yakin ingin menghapus film ini?')">Delete</button>
+        </form>
+    @endif
                             @endauth
                         </div>
                     </div>
@@ -52,7 +65,8 @@
     {{-- Pagination links --}}
     @if ($movies->hasPages())
     <div class="mt-4">
-        {{ $movies->links() }}
+        
+        {{ $movies->links() }} {{-- This will generate pagination links --}}
     </div>
     @endif
 

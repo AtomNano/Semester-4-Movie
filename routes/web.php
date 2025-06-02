@@ -24,4 +24,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/movies/{id}/edit', [MovieController::class, 'edit'])->name('movies.edit');
 Route::put('/movies/{id}', [MovieController::class, 'update'])->name('movies.update'); // Added this line for the update action
 
-// Ensure there are no other stray characters or braces in your actual web.php file.
+Route::delete('/movies/{id}', [MovieController::class, 'destroy'])->name('movies.destroy');
+
+Route::post('/movies/{id}/restore', [MovieController::class, 'restore'])->name('movies.restore');
