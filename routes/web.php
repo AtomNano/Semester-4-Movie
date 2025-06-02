@@ -7,8 +7,7 @@ use Illuminate\Support\Facades\Route;
 // 'use function Pest\Laravel\get;' can usually be removed if not specifically used outside of Pest test files.
 // If it's needed for a specific reason in your routes, ensure Pest is a production dependency, which is uncommon.
 
-Route::get('/', [MovieController::class, 'homepage']);
-
+Route::get('/', [MovieController::class, 'homepage'])->name('homepage');
 Route::get('/movies/{id}', [MovieController::class, 'show'])->name('movies.detail');
 
 // Movie Create Routes

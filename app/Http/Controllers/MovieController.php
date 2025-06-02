@@ -10,11 +10,25 @@ use Illuminate\Support\Facades\Storage;
 
 class MovieController extends Controller
 {
-    public function homepage()
-    {
-        $movies = Movie::latest()->paginate(6);
-        return view('homepage', compact('movies'));
+    public function homepage(Request $request)
+{
+    $query = Movie::query();
+
+    // Pencarian berdasarkan judul
+    if ($request->search) {
+        $query->where('title', 'like', '%' . $request->search . '%');
     }
+
+    // Filter berdasarkan kategori
+    if ($request->category) {
+        $query->where('category_id', $request->category);
+    }
+
+    $movies = $query->latest()->paginate(16);
+    $categories = Category::all(); // Ambil semua kategori dari database
+
+    return view('homepage', compact('movies', 'categories'));
+}
 
     public function detailMovie($id, $slug)
     {
@@ -152,4 +166,7 @@ public function restore($id)
 
     return redirect('/')->with('success', 'Movie berhasil dikembalikan!');
 }
+
+
+
 }

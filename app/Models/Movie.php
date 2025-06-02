@@ -1,5 +1,4 @@
 <?php
-// filepath: app/Models/Movie.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,4 +12,10 @@ class Movie extends Model
     protected $fillable = [
         'title', 'synopsis', 'category_id', 'year', 'actors', 'cover_image', 'slug',
     ];
+
+    
+public function category()
+{
+    return $this->belongsTo(Category::class);
+}
 }
