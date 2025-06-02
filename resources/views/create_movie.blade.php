@@ -1,5 +1,5 @@
 
-@extends('layout.template')
+@extends('layouts.template')
 
 @section('content')
 <div class="row justify-content-center">
@@ -9,8 +9,8 @@
                 <h3 class="mb-0">Tambah Movie Baru</h3>
             </div>
             <div class="card-body p-4">
-                <form action="{{ route('movies.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
+             <form action="{{ route('movies.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
                     <div class="mb-3">
                         <label for="title" class="form-label">Judul</label>
                         <input type="text" class="form-control" id="title" name="title" required value="{{ old('title') }}">

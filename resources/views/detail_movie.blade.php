@@ -1,26 +1,27 @@
+@extends('layouts.template')
 
-@extends('layout.template')
 @section('content')
-
-
-<div class="col-lg-12">
-        <div class="card mb-3"">
+    <div class="container mt-4">
+        <div class="card mb-3 shadow">
             <div class="row g-0">
                 <div class="col-md-4">
-                    <img src="{{ $movie->cover_image }}" class="img-fluid rounded-start" alt="...">
-                </div>
+    @if ($movie->cover_image && file_exists(public_path('storage/' . $movie->cover_image)))
+        <img src="{{ asset('storage/' . $movie->cover_image) }}" class="img-fluid rounded-start" alt="{{ $movie->title }}">
+    @else
+        <img src="https://via.placeholder.com/300x400?text=No+Image" class="img-fluid rounded-start" alt="No Image">
+    @endif
+</div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        <h5 class="card-title">{{ $movie->title }}</h5>
-                        <p class="card-text"><small class="text-muted">Release Date: {{ $movie->year }}</small></p>
-                        <p class="card-text"><small class="text-muted">Category: {{ $movie->category->category_name }}</small></p>
-                        <p class="card-text">{{ Str::words($movie->synopsis, 20 , '...') }}</p>
-                        <a href="/" class="btn btn-success">Back</a>
+                        <h3 class="card-title">{{ $movie->title }}</h3>
+                        <p class="card-text">{{ $movie->synopsis }}</p>
+                        <p><strong>Actors:</strong> {{ $movie->actors ?? 'N/A' }}</p>
+                        <p><strong>Category:</strong> {{ $movie->category->category_name ?? 'Uncategorized' }}</p>
+                        <p><strong>Year:</strong> {{ $movie->year }}</p>
+                        <a href="{{ url()->previous() }}" class="btn btn-success">Back</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    
 @endsection
