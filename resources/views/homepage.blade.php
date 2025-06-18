@@ -4,9 +4,16 @@
 
 @section('content')
     <div class="container py-5">
+        {{-- Tampilkan pesan sukses dan error --}}
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
                 {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                {{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
@@ -32,11 +39,11 @@
                         </select>
                     </div>
                     @auth
-                        <div class="col-md-auto">
-                            <a href="{{ route('movies.create') }}" class="btn btn-primary">
-                                <i class="bi bi-plus-lg"></i> Tambah Film
-                            </a>
-                        </div>
+                        @if(Auth::user()->role === 'admin')
+                            <div class="col-md-auto">
+                                <a href="{{ route('movies.create') }}" class="btn btn-primary">Tambah Film</a>
+                            </div>
+                        @endif
                     @endauth
                 </form>
             </div>
@@ -71,32 +78,29 @@
                             </a>
                         </div>
                         @auth
-                            <div class="card-footer bg-transparent">
-                                <div class="d-flex gap-2 justify-content-between">
-                                    <a href="{{ route('movies.edit', ['id' => $movie->id]) }}" 
-                                       class="btn btn-warning btn-sm flex-grow-1">
-                                        <i class="bi bi-pencil"></i> Edit
+                            @if(Auth::user()->role === 'admin')
+                                <div class="card-footer bg-transparent d-flex justify-content-between">
+                                    <a href="{{ route('movies.edit', ['id' => $movie->id]) }}" class="btn btn-warning btn-sm">
+                                        <i class="bi bi-pencil-square me-1"></i>Edit
                                     </a>
                                     @if ($movie->trashed())
-                                        <form action="{{ route('movies.restore', ['id' => $movie->id]) }}" 
-                                              method="POST" class="flex-grow-1">
+                                        <form action="{{ route('movies.restore', ['id' => $movie->id]) }}" method="POST">
                                             @csrf
-                                            <button type="submit" class="btn btn-success btn-sm w-100">
-                                                <i class="bi bi-arrow-counterclockwise"></i> Pulihkan
+                                            <button type="submit" class="btn btn-success btn-sm">
+                                                <i class="bi bi-arrow-counterclockwise me-1"></i>Pulihkan
                                             </button>
                                         </form>
                                     @else
-                                        <form action="{{ route('movies.destroy', ['id' => $movie->id]) }}" 
-                                              method="POST" class="flex-grow-1">
+                                        <form action="{{ route('movies.destroy', ['id' => $movie->id]) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm w-100" data-confirm-delete>
-                                                <i class="bi bi-trash"></i> Hapus
+                                            <button type="submit" class="btn btn-danger btn-sm" data-confirm-delete>
+                                                <i class="bi bi-trash me-1"></i>Hapus
                                             </button>
                                         </form>
                                     @endif
                                 </div>
-                            </div>
+                            @endif
                         @endauth
                     </div>
                 </div>

@@ -19,10 +19,11 @@ Route::get('/login', [AuthController::class, 'LoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'loginAction'])->name('login.action'); // Assuming 'login' in AuthController is loginAction or similar
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Movie Edit and Update Routes
-Route::get('/movies/{id}/edit', [MovieController::class, 'edit'])->name('movies.edit');
-Route::put('/movies/{id}', [MovieController::class, 'update'])->name('movies.update'); // Added this line for the update action
-
-Route::delete('/movies/{id}', [MovieController::class, 'destroy'])->name('movies.destroy');
-
-Route::post('/movies/{id}/restore', [MovieController::class, 'restore'])->name('movies.restore');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/create-movie', [MovieController::class, 'create'])->name('movies.create');
+    Route::post('/create-movie', [MovieController::class, 'store'])->name('movies.store');
+    Route::get('/movies/{id}/edit', [MovieController::class, 'edit'])->name('movies.edit');
+    Route::put('/movies/{id}', [MovieController::class, 'update'])->name('movies.update');
+    Route::delete('/movies/{id}', [MovieController::class, 'destroy'])->name('movies.destroy');
+    Route::post('/movies/{id}/restore', [MovieController::class, 'restore'])->name('movies.restore');
+});

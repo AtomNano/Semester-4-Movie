@@ -6,7 +6,9 @@ use App\Models\Movie;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class MovieController extends Controller
 {
@@ -42,12 +44,16 @@ class MovieController extends Controller
         return view('detail_movie', compact('movie'));
     }
 
-    public function create()
-    {
-        $categories = Category::all();
-        return view('create_movie', compact('categories'));
+public function create()
+{
+    $user = auth()->user();
+    if (!$user || $user->role !== 'admin') {
+        // Jika bukan admin, redirect ke homepage dengan pesan error
+        return redirect('/')->with('error', 'Anda tidak memiliki akses.');
     }
-
+    $categories = Category::all();
+    return view('create_movie', compact('categories'));
+}
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -146,27 +152,28 @@ private function generateUniqueSlug($title, $id = null)
     return $slug;
 }
 
-
 public function destroy($id)
 {
-    $movie = Movie::findOrFail($id);
+    if (auth()->user()->role !== 'admin') {
+        return redirect('/')->with('error', 'Hanya admin yang dapat menghapus movie.');
+    }
 
-    // Soft delete data
+    $movie = Movie::findOrFail($id);
     $movie->delete();
 
-    return redirect('/')->with('success', 'Movie berhasil dihapus (soft delete)!');
+    return redirect('/')->with('success', 'Movie berhasil dihapus!');
 }
 
 public function restore($id)
 {
-    $movie = Movie::withTrashed()->findOrFail($id);
+    if (auth()->user()->role !== 'admin') {
+        return redirect('/')->with('error', 'Hanya admin yang dapat restore movie.');
+    }
 
-    // Restore data
+    $movie = Movie::withTrashed()->findOrFail($id);
     $movie->restore();
 
     return redirect('/')->with('success', 'Movie berhasil dikembalikan!');
 }
-
-
 
 }
